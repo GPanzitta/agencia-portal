@@ -23,8 +23,8 @@ vi.stubGlobal('fetch', (entrada: RequestInfo | URL, init?: RequestInit) => {
   const url = String(entrada);
   // Sólo se simula el backend: lo que el renderizador pida para sí
   // (las fuentes) tiene que seguir andando.
-  if (url.includes('/tienda/')) {
-    if (backendCaido || !url.includes('/tienda/perfil')) return Promise.reject(new Error('backend caído'));
+  if (url.includes('/catalogo/')) {
+    if (backendCaido || !url.includes('/catalogo/perfil')) return Promise.reject(new Error('backend caído'));
     const perfil = { ...PERFIL_POR_DEFECTO, nombre: 'Autos Pérez', color_acento: 'rojo' };
     return Promise.resolve(
       new Response(JSON.stringify(perfil), { status: 200, headers: { 'content-type': 'application/json' } }),

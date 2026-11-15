@@ -60,7 +60,8 @@ export const perfil = cache(async (): Promise<PerfilPublico> => {
     // Con dirección propia (`perez.dominio`) el perfil es el de esa agencia. Sólo para el
     // servidor (lee el host con `next/headers`): ningún componente del navegador carga este archivo.
     const agencia = await cabecerasDeAgencia();
-    const ruta = agencia['x-agencia'] ? 'catalogo/perfil' : 'tienda/perfil';
+    // Sin dirección propia el backend resuelve la única agencia que hay (o SHOP_COMPANY_ID).
+    const ruta = 'catalogo/perfil';
     const res = await fetch(`${API}/${ruta}`, { cache: 'no-store', signal: AbortSignal.timeout(2500), headers: agencia });
     if (!res.ok) return { ...PERFIL_POR_DEFECTO, respaldo: true };
     const datos = (await res.json()) as PerfilPublico;
