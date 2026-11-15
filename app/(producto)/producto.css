@@ -1,0 +1,16 @@
+/* La página del producto: usa la base del sitio de la agencia (`autos.css`) y suma lo propio. */
+.au a.pr-boton, .pr-boton { background: var(--au-acento); border-color: var(--au-acento); color: var(--au-blanco); }
+.pr-hero { grid-template-columns: minmax(0, 1fr); }
+.pr-hero h1 { max-width: 16ch; }
+.pr-nota { margin: 14px 0 0; color: rgba(255, 255, 255, 0.75); font-size: 0.95rem; }
+.pr-incluye { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 0 28px; }
+.pr-incluye li { display: flex; flex-direction: column; gap: 4px; padding: 14px 0; border-top: 1px solid var(--au-linea); }
+.pr-incluye b { font-size: 1.05rem; }
+.pr-incluye span { color: var(--au-suave); font-size: 0.95rem; }
+.pr-planes { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; max-width: 760px; }
+.pr-planes article { background: var(--au-blanco); border: 1px solid var(--au-linea); border-radius: 6px; padding: 22px; }
+.pr-planes h3 { margin: 0; font-size: 1.1rem; }
+.pr-planes p { margin: 8px 0 0; color: var(--au-suave); }
+.pr-planes .pr-precio { font-family: var(--au-titular); font-weight: 900; font-size: 2.6rem; line-height: 1; color: var(--au-tinta); font-variant-numeric: tabular-nums; }
+.pr-planes .pr-precio small { font: 400 0.95rem var(--au-texto); color: var(--au-suave); }
+.pr-planes .pr-plan-pago { border: 2px solid var(--au-grafito); }

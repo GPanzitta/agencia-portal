@@ -1,0 +1,281 @@
+/*
+ * El sitio de la agencia (14/11/2026).
+ * Fondo cálido claro, barra negra, títulos pesados en mayúscula y UN color fuerte: el que la
+ * agencia eligió en el ERP (`--mq-acento`), que aparece en franjas inclinadas detrás de los autos.
+ */
+.mq {
+  --mq-papel: #ecebe3; --mq-blanco: #ffffff; --mq-negro: #0e0e0e; --mq-tinta: #141414; --mq-suave: #5a5a55; --mq-linea: #d3d1c6; --mq-noche: #131a2b;
+  --mq-acento: #d4201f; --mq-sobre-acento: #ffffff;
+  --mq-titular: var(--font-titular), Impact, 'Arial Narrow', sans-serif; --mq-texto: var(--font-texto), system-ui, sans-serif;
+  --mq-ancho: 1240px; --mq-borde: max(20px, calc((100% - var(--mq-ancho)) / 2));
+  min-height: 100vh; background: var(--mq-papel); color: var(--mq-tinta); font-family: var(--mq-texto); font-size: 16px; line-height: 1.5; overflow-x: clip;
+}
+.mq a { color: inherit; text-decoration: none; }
+.mq h1, .mq h2, .mq h3, .mq p, .mq ul, .mq dl, .mq dd { margin: 0; padding: 0; }
+.mq ul { list-style: none; }
+.mq :focus-visible { outline: 3px solid var(--mq-acento); outline-offset: 2px; }
+.mq-salto { position: absolute; left: -9999px; }
+.mq-salto:focus { left: 8px; top: 8px; z-index: 30; background: var(--mq-blanco); padding: 8px 12px; }
+
+/* Barra negra: marca a la izquierda, secciones y WhatsApp a la derecha. */
+.mq-barra { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 26px; height: 64px; padding: 0 var(--mq-borde); background: var(--mq-negro); color: var(--mq-blanco); }
+.mq-marca { font-family: var(--mq-titular); font-weight: 900; font-size: 1.65rem; text-transform: uppercase; line-height: 1; white-space: nowrap; }
+.mq-barra nav { display: flex; gap: 24px; margin-left: auto; font-size: 0.95rem; }
+.mq-barra nav a { padding: 21px 0; border-bottom: 3px solid transparent; white-space: nowrap; color: #e6e6e1; }
+.mq-barra nav a:hover { border-bottom-color: var(--mq-acento); color: var(--mq-blanco); }
+
+.mq-boton { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 20px; border: 2px solid var(--mq-tinta); border-radius: 4px; background: var(--mq-tinta); color: var(--mq-blanco) !important; font: inherit; font-weight: 600; cursor: pointer; white-space: nowrap; }
+.mq-boton--claro { background: transparent; border-color: currentColor; color: inherit !important; }
+.mq-boton--acento { background: var(--mq-acento); border-color: var(--mq-acento); color: var(--mq-sobre-acento) !important; }
+.mq-boton:hover { filter: brightness(1.1); }
+/* El botón inclinado: va con las franjas. El texto se endereza adentro. */
+.mq-sesgo { display: inline-flex; align-items: center; justify-content: center; min-height: 42px; padding: 0 22px; background: var(--mq-acento); border: 2px solid var(--mq-acento); color: var(--mq-sobre-acento) !important; font-weight: 600; font-style: italic; transform: skewX(-14deg); }
+.mq-sesgo span { transform: skewX(14deg); }
+.mq-sesgo--claro { background: var(--mq-blanco); color: var(--mq-acento) !important; }
+.mq-sesgo--blanco { background: var(--mq-blanco); border-color: var(--mq-blanco); color: var(--mq-tinta) !important; }
+.mq-sesgo:hover { filter: brightness(1.08); }
+
+/* Las franjas: cuatro barras inclinadas del color de la agencia. */
+.mq-franjas { position: absolute; left: 6%; top: 0; width: 46%; height: 78%; transform: skewX(-18deg); background: repeating-linear-gradient(90deg, var(--mq-acento) 0 12.5%, transparent 12.5% 25%); }
+.mq-rayas { display: inline-block; width: 44px; height: 0.72em; margin-right: 0.45em; transform: skewX(-18deg); background: repeating-linear-gradient(90deg, var(--mq-acento) 0 6px, transparent 6px 11px); vertical-align: baseline; }
+
+/* Banner: a todo el ancho. Hoy lo arma el color y un auto; mañana, una foto. */
+.mq-banner { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); align-items: center; gap: 24px; min-height: 470px; padding: 40px var(--mq-borde) 70px; background: var(--mq-negro); color: var(--mq-blanco); overflow: hidden; }
+.mq-banner h1 { font-family: var(--mq-titular); font-weight: 900; text-transform: uppercase; font-size: clamp(2.6rem, 5.6vw, 5rem); line-height: 0.96; margin-bottom: 14px; }
+.mq-banner p { color: #cfcfc8; font-size: 1.15rem; margin-bottom: 24px; max-width: 34ch; }
+.mq-banner-auto { position: relative; align-self: end; padding-top: 12%; }
+.mq-banner-auto .mq-franjas { left: 2%; width: 62%; height: 96%; }
+.mq-banner-auto .mq-auto { position: relative; width: 100%; height: auto; display: block; }
+.mq-banner > small { position: absolute; right: var(--mq-borde); bottom: 44px; font-size: 0.8rem; color: #9a9a93; }
+
+/* El buscador se apoya sobre el borde del banner. */
+.mq-busca { position: relative; z-index: 2; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px 10px; width: min(880px, calc(100% - 40px)); margin: -34px auto 0; padding: 16px; background: var(--mq-blanco); border-radius: 6px; box-shadow: 0 10px 30px rgba(14, 14, 14, 0.16); }
+.mq-busca input { min-width: 0; height: 52px; padding: 0 16px; border: 2px solid var(--mq-tinta); border-radius: 4px; background: var(--mq-blanco); color: var(--mq-tinta); font: inherit; font-size: 1.05rem; }
+.mq-busca .mq-boton { min-height: 52px; padding: 0 28px; }
+.mq-caminos { grid-column: 1 / -1; display: flex; gap: 22px; flex-wrap: wrap; font-size: 0.95rem; }
+.mq-caminos a { text-decoration: underline; text-underline-offset: 4px; text-decoration-color: var(--mq-acento); text-decoration-thickness: 2px; }
+
+.mq-seccion { max-width: var(--mq-ancho); margin: 0 auto; padding: 60px 20px 0; }
+.mq-titulo { font-family: var(--mq-titular); font-weight: 900; text-transform: uppercase; font-size: clamp(1.9rem, 3.6vw, 2.8rem); line-height: 1.02; margin-bottom: 24px !important; }
+.mq-titulo--centro { text-align: center; }
+.mq-subtitulo { font-size: 1rem; font-weight: 600; margin: 32px 0 12px !important; color: var(--mq-suave); }
+.mq-cabeza { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; }
+.mq-cabeza > a { font-weight: 600; text-decoration: underline; text-underline-offset: 4px; }
+.mq-cabeza > span { color: var(--mq-suave); }
+.mq-vacio { padding: 24px; background: var(--mq-blanco); border: 1px dashed #b1aea2; border-radius: 6px; }
+.mq-vacio a { text-decoration: underline; }
+.mq-nota { margin-top: 16px !important; font-size: 0.85rem; color: var(--mq-suave); text-align: center; }
+
+/* La vitrina: pestañas con una línea debajo y los autos sobre sus franjas. */
+.mq-pestanas { display: flex; justify-content: center; flex-wrap: wrap; border-bottom: 2px solid var(--mq-tinta); margin: 0 auto 34px; width: fit-content; max-width: 100%; }
+.mq-pestanas button { padding: 12px 30px; border: 0; background: none; color: var(--mq-tinta); font: inherit; text-transform: uppercase; letter-spacing: 0.03em; font-size: 0.95rem; cursor: pointer; }
+.mq-pestanas button[aria-selected='true'] { font-weight: 800; box-shadow: inset 0 -5px 0 var(--mq-acento); }
+.mq-fila { display: grid; grid-template-columns: 44px minmax(0, 1fr) 44px; align-items: center; gap: 8px; }
+.mq-fila ul { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+.mq-fila ul::-webkit-scrollbar { display: none; }
+.mq-fila li { flex: 0 0 calc(100% / 3); scroll-snap-align: start; display: grid; justify-items: center; text-align: center; gap: 2px; padding: 0 16px 8px; }
+.mq-flecha { width: 44px; height: 44px; border: 0; background: none; color: var(--mq-tinta); font-size: 2.2rem; line-height: 1; cursor: pointer; }
+.mq-flecha:hover { color: var(--mq-acento); }
+.mq-escena { position: relative; display: flex; align-items: flex-end; justify-content: center; width: 100%; aspect-ratio: 16 / 9; margin-bottom: 14px; }
+.mq-auto { position: relative; width: 96%; height: auto; display: block; flex: none; transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1); transform-origin: 50% 88%; }
+/* Al pasar por encima el auto se acerca un poco, despacio. Es chico y lo dispara la persona: se mantiene siempre. */
+.mq-escena:hover .mq-auto, .mq-escena:focus-visible .mq-auto { transform: scale(1.1); }
+.mq-fila h3 { font-family: var(--mq-titular); font-weight: 700; text-transform: uppercase; font-size: 1.6rem; line-height: 1.1; }
+.mq-fila li > p { color: var(--mq-suave); font-size: 0.95rem; }
+.mq-fila li > b { font-family: var(--mq-titular); font-weight: 900; font-size: 1.8rem; line-height: 1.15; }
+.mq-par { display: flex; gap: 10px; margin-top: 12px; }
+
+/* Tres accesos: lo que la agencia hace además de mostrar autos. */
+.mq-accesos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+.mq-accesos a { position: relative; display: grid; gap: 6px; align-content: start; height: 100%; min-height: 190px; padding: 26px 24px 64px; background: var(--mq-negro); color: var(--mq-blanco); overflow: hidden; }
+.mq-accesos strong { font-family: var(--mq-titular); font-weight: 900; text-transform: uppercase; font-size: 1.8rem; line-height: 1.02; }
+.mq-accesos span { color: #cfcfc8; max-width: 30ch; }
+.mq-accesos em { position: absolute; left: 0; bottom: 0; padding: 8px 26px 8px 24px; background: var(--mq-acento); color: var(--mq-sobre-acento); font-weight: 600; clip-path: polygon(0 0, 100% 0, calc(100% - 14px) 100%, 0 100%); transition: padding 0.2s; }
+.mq-accesos a:hover em { padding-right: 40px; }
+
+/* Cuotas: una franja blanca a todo el ancho. */
+.mq-seccion--cuotas { max-width: none; margin-top: 60px; padding: 56px var(--mq-borde); background: var(--mq-blanco); }
+.mq-planes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+.mq-planes li { display: grid; justify-items: center; text-align: center; gap: 4px; padding: 20px 18px 26px; border: 1px solid var(--mq-linea); }
+.mq-plan-auto { width: 78%; margin-bottom: 6px; }
+.mq-plan-auto .mq-auto { width: 100%; }
+.mq-planes li:hover .mq-auto { transform: scale(1.06); }
+.mq-planes h3 { font-family: var(--mq-titular); font-weight: 700; text-transform: uppercase; font-size: 1.4rem; line-height: 1.1; }
+.mq-planes p b { font-family: var(--mq-titular); font-weight: 900; font-size: 1.7rem; }
+.mq-planes small { color: var(--mq-suave); margin-bottom: 12px; }
+
+.mq-tipos { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 14px; }
+.mq-tipos a { display: grid; justify-items: center; gap: 2px; padding: 20px 16px 16px; background: var(--mq-blanco); border-bottom: 5px solid transparent; }
+.mq-tipos a:hover { border-bottom-color: var(--mq-acento); }
+.mq-tipos .mq-auto { width: 160px; margin-bottom: 6px; }
+.mq-tipos a:hover .mq-auto { transform: scale(1.06); }
+.mq-tipos strong { font-size: 1.05rem; }
+.mq-tipos span { color: var(--mq-suave); font-size: 0.9rem; }
+.mq-marcas { display: flex; flex-wrap: wrap; gap: 8px; }
+.mq-marcas a { display: inline-flex; gap: 10px; align-items: center; padding: 8px 8px 8px 16px; background: var(--mq-blanco); border: 1px solid var(--mq-linea); border-radius: 999px; font-weight: 500; }
+.mq-marcas a:hover { border-color: var(--mq-tinta); }
+.mq-marcas span { min-width: 26px; height: 26px; display: grid; place-items: center; border-radius: 50%; background: var(--mq-tinta); color: var(--mq-blanco); font-size: 0.8rem; font-weight: 600; }
+
+/* La tarjeta de un auto: foto, nombre, precio y tres datos en una línea. */
+.mq-tarjetas { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+.mq-tarjetas--tres { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.mq-tarjeta { display: grid; gap: 2px; height: 100%; background: var(--mq-blanco); border: 1px solid var(--mq-linea); overflow: hidden; padding-bottom: 14px; }
+.mq-tarjeta:hover { border-color: var(--mq-tinta); }
+.mq-tarjeta-foto { position: relative; aspect-ratio: 16 / 10; background: #dddbd1; display: flex; align-items: flex-end; justify-content: center; padding: 0 8% 4%; margin-bottom: 10px; overflow: hidden; }
+.mq-tarjeta-foto img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.mq-tarjeta-foto .mq-auto { width: 100%; }
+.mq-tarjeta:hover .mq-auto { transform: scale(1.06); }
+.mq-tarjeta-foto b { position: absolute; left: 0; top: 12px; padding: 4px 18px 4px 12px; background: var(--mq-acento); color: var(--mq-sobre-acento); font-size: 0.8rem; font-weight: 600; clip-path: polygon(0 0, 100% 0, calc(100% - 10px) 100%, 0 100%); }
+.mq-tarjeta-foto b[data-tono='reservado'] { background: var(--mq-negro); color: var(--mq-blanco); }
+.mq-tarjeta h3, .mq-tarjeta > p, .mq-tarjeta > strong { padding-inline: 16px; }
+.mq-tarjeta h3 { font-size: 1.08rem; font-weight: 600; }
+.mq-tarjeta > p { color: var(--mq-suave); font-size: 0.9rem; }
+.mq-tarjeta > strong { font-family: var(--mq-titular); font-weight: 900; font-size: 1.9rem; line-height: 1.15; }
+.mq-tarjeta dl { display: flex; gap: 10px; margin: 8px 16px 0 !important; padding-top: 10px !important; border-top: 1px solid var(--mq-linea); }
+.mq-tarjeta dl div { display: flex; flex-direction: column-reverse; }
+.mq-tarjeta dl div:last-child { margin-left: auto; text-align: right; }
+.mq-tarjeta dt { font-size: 0.78rem; color: var(--mq-suave); }
+.mq-tarjeta dd { font-weight: 600; font-size: 0.88rem; white-space: nowrap; }
+
+/* Por qué elegirnos: la franja oscura. */
+.mq-porque { margin-top: 64px; padding: 56px var(--mq-borde); background: var(--mq-noche); color: var(--mq-blanco); }
+.mq-porque ul { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; }
+.mq-porque li { padding: 18px 20px; background: rgba(255, 255, 255, 0.07); }
+.mq-porque strong { display: block; font-size: 1.15rem; margin-bottom: 4px; }
+.mq-porque p { color: #c5cad6; }
+
+/* Nuestro salón: el título sobre el color de la agencia, los datos debajo. */
+.mq-salon h2 { padding: 22px var(--mq-borde); background: var(--mq-acento); color: var(--mq-sobre-acento); font-family: var(--mq-titular); font-weight: 900; text-transform: uppercase; font-size: clamp(1.8rem, 3.4vw, 2.6rem); line-height: 1; text-align: center; letter-spacing: 0.04em; }
+.mq-salon h2 .mq-rayas { background: repeating-linear-gradient(90deg, var(--mq-sobre-acento) 0 6px, transparent 6px 11px); }
+.mq-salon-cuerpo { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 32px; padding: 40px var(--mq-borde) 48px; background: var(--mq-blanco); }
+.mq-salon h3 { font-size: 0.9rem; font-weight: 600; color: var(--mq-suave); margin-bottom: 6px; }
+.mq-direccion { font-family: var(--mq-titular); font-weight: 700; font-size: 1.7rem; line-height: 1.1; text-transform: uppercase; margin-bottom: 6px !important; }
+.mq-salon .mq-boton { margin-top: 14px; }
+.mq-salon-cuerpo a:not(.mq-boton) { text-decoration: underline; text-underline-offset: 4px; }
+.mq-pie { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 28px; padding: 22px var(--mq-borde); background: var(--mq-negro); color: #cfcfc8; font-size: 0.92rem; }
+.mq-pie strong { font-family: var(--mq-titular); font-weight: 900; text-transform: uppercase; font-size: 1.3rem; color: var(--mq-blanco); }
+.mq-pie nav { display: flex; gap: 20px; }
+.mq-pie a:hover { color: var(--mq-blanco); text-decoration: underline; }
+.mq-pie small { margin-left: auto; }
+
+/* Buscador: la barra de filtros arriba y, debajo, la línea de búsqueda. */
+.mq-filtros { background: var(--mq-blanco); border-bottom: 1px solid var(--mq-linea); padding: 22px var(--mq-borde) 18px; display: grid; gap: 12px; }
+.mq-filtros-grilla { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.mq-filtros label { display: grid; gap: 3px; min-width: 0; }
+.mq-filtros label span { font-size: 0.8rem; color: var(--mq-suave); }
+.mq-filtros select, .mq-filtros input { height: 46px; width: 100%; padding: 0 12px; border: 1px solid #b1aea2; border-radius: 4px; background: var(--mq-blanco); font: inherit; color: var(--mq-tinta); }
+.mq-doble { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.mq-filtros-linea { display: flex; gap: 10px; align-items: center; }
+.mq-filtros-linea input { flex: 1; height: 50px; background: var(--mq-papel); border-color: transparent; }
+.mq-filtros-linea .mq-boton { min-height: 50px; background: var(--mq-acento); border-color: var(--mq-acento); color: var(--mq-sobre-acento) !important; }
+.mq-limpiar { text-decoration: underline; text-underline-offset: 4px; white-space: nowrap; }
+.mq-resultados { max-width: var(--mq-ancho); margin: 0 auto; padding: 30px 20px 64px; display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 32px; align-items: start; }
+.mq-resultados aside h2 { font-size: 1rem; font-weight: 600; margin-bottom: 10px; }
+.mq-resultados aside section { padding: 12px 0; border-top: 1px solid var(--mq-linea); }
+.mq-resultados aside h3 { font-size: 0.9rem; font-weight: 600; margin-bottom: 4px; }
+.mq-resultados aside a { display: block; padding: 3px 0; }
+.mq-resultados aside a:hover { text-decoration: underline; }
+.mq-resultados aside a[aria-current] { font-weight: 700; box-shadow: inset 4px 0 0 var(--mq-acento); padding-left: 10px; }
+.mq-resultados aside span { color: var(--mq-suave); }
+.mq-resultados h1 { font-family: var(--mq-titular); font-weight: 900; text-transform: uppercase; font-size: 2rem; line-height: 1.05; }
+.mq-resultados .mq-cabeza { margin-bottom: 14px; }
+.mq-activos { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px !important; }
+.mq-activos a { display: inline-flex; gap: 8px; align-items: center; padding: 5px 10px 5px 14px; background: var(--mq-tinta); color: var(--mq-blanco); border-radius: 999px; font-size: 0.9rem; }
+
+/* Cotizador: primero para qué, después los datos. */
+.mq-cotizar { max-width: var(--mq-ancho); margin: 0 auto; padding: 48px 20px 64px; }
+.mq-cotizar header { margin-bottom: 30px; }
+.mq-cotizar h1 { font-family: var(--mq-titular); font-weight: 900; text-transform: uppercase; font-size: clamp(2.2rem, 5vw, 3.6rem); line-height: 1; }
+.mq-cotizar header p { color: var(--mq-suave); font-size: 1.1rem; max-width: 56ch; }
+.mq-cotizar-cuerpo { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 48px; align-items: start; }
+.mq-motivo h2 { font-size: 1.25rem; font-weight: 600; margin-bottom: 14px; }
+.mq-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 22px; }
+.mq-chips button { min-height: 46px; padding: 0 20px; border: 2px solid var(--mq-tinta); border-radius: 4px; background: transparent; font: inherit; font-weight: 600; cursor: pointer; color: var(--mq-tinta); }
+.mq-chips button[aria-checked='true'] { background: var(--mq-acento); border-color: var(--mq-acento); color: var(--mq-sobre-acento); }
+.mq-motivo h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 6px; }
+.mq-motivo p { color: var(--mq-suave); max-width: 46ch; }
+.mq-form { background: var(--mq-blanco); border: 1px solid var(--mq-linea); padding: 24px; }
+.mq-motivo-columna { position: sticky; top: 90px; display: grid; gap: 22px; }
+.mq-por { padding: 12px 14px; background: var(--mq-blanco); border-left: 5px solid var(--mq-acento); }
+.mq-por a { text-decoration: underline; }
+.mq-tener { color: var(--mq-suave); font-size: 0.92rem; max-width: 46ch; }
+
+@media (max-width: 1100px) { .mq-barra nav { gap: 16px; font-size: 0.88rem; } }
+@media (max-width: 940px) {
+  .mq-barra nav { display: none; }
+  .mq-barra { justify-content: space-between; }
+  .mq-banner { grid-template-columns: minmax(0, 1fr); min-height: 0; padding-top: 34px; }
+  .mq-banner > small { position: static; }
+  .mq-fila { grid-template-columns: minmax(0, 1fr); }
+  .mq-flecha { display: none; }
+  .mq-fila li { flex-basis: 84%; }
+  .mq-accesos, .mq-planes, .mq-porque ul, .mq-salon-cuerpo, .mq-cotizar-cuerpo { grid-template-columns: minmax(0, 1fr); }
+  .mq-tarjetas, .mq-tarjetas--tres { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .mq-filtros-grilla { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .mq-resultados { grid-template-columns: minmax(0, 1fr); }
+  .mq-resultados aside { display: none; }
+  .mq-motivo-columna { position: static; }
+  .mq-pie small { margin-left: 0; }
+}
+@media (max-width: 560px) {
+  .mq-tarjetas, .mq-tarjetas--tres { grid-template-columns: minmax(0, 1fr); }
+  .mq-busca { grid-template-columns: minmax(0, 1fr); }
+  .mq-filtros-linea { flex-wrap: wrap; }
+  .mq-pestanas button { padding: 10px 16px; }
+}
+
+/* En pantallas angostas el titular del banner tiene que entrar entero. */
+.mq-banner h1 { font-size: clamp(1.9rem, 5.2vw + 0.7rem, 5rem); overflow-wrap: break-word; }
+.mq-banner, .mq-banner-texto { min-width: 0; }
+.mq-sesgo { white-space: nowrap; }
+.mq-par { flex-wrap: wrap; justify-content: center; }
+@media (max-width: 560px) {
+  .mq-barra { gap: 12px; padding-inline: 14px; }
+  .mq-marca { font-size: 1.35rem; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+  .mq-barra .mq-boton { min-height: 40px; padding: 0 14px; flex: none; }
+  .mq-fila li { flex-basis: 100%; padding-inline: 4px; }
+  .mq-sesgo { padding: 0 16px; min-height: 40px; }
+}
+
+/* ─── Las páginas de adentro (publicación, contacto, reserva) ───────────────
+   Siguen con sus estilos `au-`, pero toman los colores del sitio nuevo y quedan centradas. */
+.mq .mq-principal.au {
+  display: block; min-height: 0; background: none; color: var(--mq-tinta); outline: none;
+  --au-grafito: var(--mq-negro); --au-grafito-2: #2b2b2b; --au-papel: var(--mq-papel); --au-blanco: var(--mq-blanco); --au-tinta: var(--mq-tinta);
+  --au-suave: var(--mq-suave); --au-linea: var(--mq-linea); --au-acento: var(--mq-acento); --au-ancho: var(--mq-ancho);
+}
+.mq-principal > [class^='au-'], .mq-principal > [class*=' au-'] { max-width: var(--mq-ancho); margin-inline: auto; padding-inline: 20px; }
+.mq-principal > [class^='au-']:last-child, .mq-principal > [class*=' au-']:last-child { padding-bottom: 60px; }
+.mq .au-etiqueta[data-tono='nuevo'] { color: var(--mq-sobre-acento); }
+.mq .au-boton { border-radius: 4px; }
+.mq .au-pub h1, .mq .au-bloque h2 { font-family: var(--mq-titular); text-transform: uppercase; font-weight: 900; letter-spacing: 0; }
+.mq .au-pub h1 { font-size: 1.9rem; line-height: 1.02; }
+.mq .au-bloque h2 { font-size: 1.7rem; }
+.mq .au-opcion--principal { background: var(--mq-negro); border-color: var(--mq-negro); }
+.mq .au-gal-minis button[aria-current='true'] { border-color: var(--mq-acento); }
+
+/* «¿No está el que buscás?», al pie del catálogo. */
+.mq-avisame { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 40px; align-items: start; padding: 56px var(--mq-borde); background: var(--mq-blanco); border-top: 1px solid var(--mq-linea); }
+.mq-avisame p { color: var(--mq-suave); max-width: 40ch; }
+
+.mq-wa-flotante { display: none; position: fixed; right: 14px; bottom: 14px; z-index: 25; padding: 12px 18px; border-radius: 999px; background: #0f7a36; color: #fff !important; font-weight: 600; box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25); }
+
+/* En el celular las secciones quedan en una fila que se desliza, debajo de la marca. */
+@media (max-width: 940px) {
+  .mq-barra { height: auto; flex-wrap: wrap; padding-block: 10px 0; row-gap: 4px; }
+  .mq-barra nav { display: flex; order: 3; width: 100%; margin: 0; gap: 20px; overflow-x: auto; scrollbar-width: none; }
+  .mq-barra nav::-webkit-scrollbar { display: none; }
+  .mq-barra nav a { padding: 10px 0; }
+  .mq-barra > .mq-boton { display: none; }
+  .mq-wa-flotante { display: inline-flex; }
+  .mq-avisame { grid-template-columns: minmax(0, 1fr); gap: 20px; padding-block: 40px; }
+  .mq-pie { padding-bottom: 76px; }
+}
+
+/* Fotos reales (15/11/2026): el auto con foto de portada se muestra enmarcado, con las franjas asomando detrás. */
+.mq-marco { position: relative; display: block; width: 100%; aspect-ratio: 16 / 10; overflow: hidden; background: #111; flex: none; }
+.mq-foto { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1); }
+.mq-escena .mq-marco { width: 86%; }
+.mq-escena:hover .mq-foto, .mq-escena:focus-visible .mq-foto, .mq-planes li:hover .mq-foto { transform: scale(1.08); }
+.mq-banner-auto .mq-marco { clip-path: polygon(9% 0, 100% 0, 91% 100%, 0 100%); }
+.mq-plan-auto:has(.mq-marco) { width: 100%; }

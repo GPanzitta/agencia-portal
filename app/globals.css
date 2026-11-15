@@ -1,0 +1,67 @@
+@import "tailwindcss";
+
+/* La base de todo el sitio. Lo de la agencia vive en `(autos)/autos.css`, con
+   sus propias variables (`--au-*`); acá queda sólo lo que no depende de ningún
+   grupo: el reset, el fondo y la barra de carga. */
+:root {
+  --tinta: #181818;
+  --fondo: #F3F5F9;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --border: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--fondo);
+  color: var(--tinta);
+  font-family: var(--font-texto), system-ui, -apple-system, sans-serif;
+  font-size: 16px;
+  line-height: 1.45;
+}
+
+@theme inline {
+  --font-sans: var(--font-texto), system-ui, sans-serif;
+  --font-heading: var(--font-titular), system-ui, sans-serif;
+  --color-ring: var(--ring);
+  --color-border: var(--border);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+}
+
+/* El destino de «Ir al contenido» recibe el foco por código (`tabIndex={-1}`):
+   sin esto dibuja el anillo de foco alrededor de toda la página. */
+#contenido:focus-visible {
+  outline: none;
+}
+
+/* La barra de «cargando la página siguiente» (`components/indicador-de-navegacion.tsx`). */
+.indicador-navegacion {
+  position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 9999;
+  pointer-events: none; opacity: 0; transform: scaleX(0); transform-origin: left;
+  background: #0B6BC2;
+}
+.indicador-navegacion.activo {
+  opacity: 1;
+  animation: indicador-avanza 8s cubic-bezier(0.1, 0.7, 0.3, 1) forwards;
+}
+@keyframes indicador-avanza { from { transform: scaleX(0.05); } to { transform: scaleX(0.9); } }
+@media (prefers-reduced-motion: reduce) {
+  .indicador-navegacion.activo { animation: none; transform: scaleX(1); }
+}
