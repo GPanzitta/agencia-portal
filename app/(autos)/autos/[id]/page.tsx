@@ -9,6 +9,8 @@ import { SITIO } from '../../../lib/sitio';
 import { linkTelefono, whatsappArgentino } from '../../../lib/whatsapp';
 import Formulario from '../../formulario';
 import Galeria from '../../galeria';
+import AgendarVisita from '../../agendar-visita';
+import FavoritoBoton from '../../favorito-boton';
 import Reservar from '../../reservar';
 import Simulador from '../../simulador';
 import Tarjeta from '../../tarjeta';
@@ -90,9 +92,10 @@ export default async function PublicacionDelAuto({ params }: Props) {
             <Reservar unidadId={a.id} sena={precio({ precio: a.reserva.monto, moneda: a.reserva.moneda })} horas={a.reserva.horas} dias={a.reserva.dias} enCurso={a.reserva.en_curso} />
           )}
           <div className="au-acciones">
-            <a className="au-boton" href="#consulta">Agendar una visita</a>
+            {!a.reservada && <AgendarVisita unidadId={a.id} titulo={`${a.titulo} ${a.anio}`} />}
             {whatsapp && <a className="au-boton au-boton--wa" href={whatsapp} target="_blank" rel="noopener noreferrer">Consultar por WhatsApp</a>}
             {telefono && p.telefono && <a className="au-boton au-boton--linea" href={telefono}>Llamar al {p.telefono}</a>}
+            <FavoritoBoton id={a.id} variante="boton" />
           </div>
 
           {opciones.length > 0 && (
@@ -156,7 +159,7 @@ export default async function PublicacionDelAuto({ params }: Props) {
             </section>
           )}
 
-          {a.financiacion && !a.reservada && <div id="cuotas" className="au-ancla"><Simulador precio={a.precio} moneda={a.moneda} financiacion={a.financiacion} /></div>}
+          {a.financiacion && !a.reservada && <div id="cuotas" className="au-ancla"><Simulador unidadId={a.id} precio={a.precio} moneda={a.moneda} financiacion={a.financiacion} /></div>}
 
           {a.papeles && (
             <section className="au-bloque au-papeles">

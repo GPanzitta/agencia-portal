@@ -226,6 +226,22 @@
 .au-consulta fieldset.au-opciones { grid-template-columns: 1fr; gap: 6px; }
 .au-consulta .au-opciones label { display: flex; align-items: center; gap: 10px; font-weight: 400; font-size: 1rem; min-height: 44px; }
 .au-consulta .au-opciones input { width: 20px; height: 20px; min-height: 0; padding: 0; flex: none; accent-color: var(--au-grafito); }
+.au-consulta fieldset.au-vender-seccion { padding-top: 8px; border-top: 1px solid var(--au-linea); }
+.au-consulta label > span { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.au-opcional { font-weight: 400; font-size: 0.8rem; color: var(--au-suave); }
+.au-campo-ancho { grid-column: 1 / -1; }
+.au-descripcion-bloque { display: grid; gap: 14px; padding-top: 10px; border-top: 1px solid var(--au-linea); }
+.au-descripcion-cab { display: grid; gap: 10px; }
+.au-descripcion-cab h3 { margin: 0; font-size: 1.15rem; font-weight: 700; }
+.au-switch-desc { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 4px; background: #e8e6e0; border-radius: 8px; }
+.au-switch-desc button { min-height: 38px; border: 0; border-radius: 6px; background: transparent; color: var(--au-suave); font: 600 0.9rem var(--au-texto); cursor: pointer; transition: background 0.15s, color 0.15s, box-shadow 0.15s; }
+.au-switch-desc button.activo { background: var(--au-blanco); color: var(--au-tinta); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12); }
+.au-guia { display: grid; gap: 14px; }
+.au-guia[hidden], .au-libre[hidden] { display: none; }
+.au-guia-banner { margin: 0; padding: 12px 14px; background: #dbeafe; color: #1e3a8a; border-radius: 6px; font-size: 0.88rem; line-height: 1.4; }
+@media (max-width: 560px) {
+  .au-consulta fieldset { grid-template-columns: 1fr; }
+}
 .au-por { max-width: 520px; margin: 0 0 12px; padding: 12px 14px; background: var(--au-blanco); border-left: 4px solid var(--au-acento); }
 .au-por a { color: inherit; font-weight: 600; text-decoration: underline; }
 .au-ayuda a { color: var(--au-grafito); font-weight: 600; text-decoration: underline; }
@@ -353,3 +369,25 @@
   .au-pub-panel { position: static; }
   .au-gal-minis button { width: 84px; }
 }
+
+/* Favoritos y comparador de autos */
+.au-fav-icono { position: absolute; right: 10px; top: 10px; z-index: 2; width: 36px; height: 36px; border: 0; border-radius: 50%; background: rgba(255, 255, 255, 0.92); color: var(--au-tinta); font-size: 1.2rem; line-height: 1; cursor: pointer; display: grid; place-items: center; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18); transition: transform 0.15s, background 0.15s; }
+.au-fav-icono:hover { transform: scale(1.08); }
+.au-fav-icono.activo { background: var(--au-acento); color: var(--au-blanco); }
+.au-fav-btn.activo { border-color: var(--au-acento); color: var(--au-acento); }
+.au-favoritos-pagina { padding-bottom: 48px; }
+.au-comparador-vacio { padding: 36px 0; max-width: 56ch; }
+.au-comparador-tabla-wrap { margin-top: 24px; overflow-x: auto; background: var(--au-blanco); border: 1px solid var(--au-linea); border-radius: 8px; }
+.au-comparador-tabla { width: 100%; border-collapse: collapse; min-width: 600px; }
+.au-comparador-tabla th, .au-comparador-tabla td { padding: 14px 16px; border-bottom: 1px solid var(--au-linea); text-align: left; vertical-align: middle; }
+.au-comparador-tabla tbody th { width: 170px; font-size: 0.88rem; color: var(--au-suave); font-weight: 600; background: #faf9f6; }
+.au-comp-cab { display: grid; gap: 6px; min-width: 190px; }
+.au-comp-foto { display: block; aspect-ratio: 16 / 10; border-radius: 6px; overflow: hidden; background: var(--au-grafito-2); display: grid; place-items: center; color: rgba(255, 255, 255, 0.5); text-decoration: none; }
+.au-comp-foto img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.au-comp-titulo { font-size: 1.05rem; font-weight: 700; text-decoration: none; }
+.au-comp-titulo:hover { text-decoration: underline; }
+.au-comp-cab small { font-weight: 400; color: var(--au-suave); }
+.au-comp-quitar { justify-self: start; border: 0; background: none; padding: 0; font-size: 0.82rem; color: var(--au-suave); text-decoration: underline; cursor: pointer; }
+.au-comp-precio { font-family: var(--au-titular); font-weight: 900; font-size: 1.7rem; }
+.au-comp-acciones { display: flex; gap: 8px; flex-wrap: wrap; }
+.au-comp-acciones .au-boton { min-height: 38px; padding: 0 12px; font-size: 0.88rem; }

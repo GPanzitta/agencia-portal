@@ -39,6 +39,7 @@ export default async function LayoutAutos({ children }: { children: React.ReactN
           <Link href="/autos?condicion=usado">Usados</Link>
           <Link href="/#cuotas">Financiación</Link>
           <Link href="/cotiza-tu-auto">Cotizador de usados</Link>
+          <Link href="/favoritos">Comparar guardados</Link>
           <a href="#salon">Dónde estamos</a>
         </nav>
         {whatsapp && <a className="mq-boton mq-boton--acento" href={whatsapp} target="_blank" rel="noopener noreferrer">WhatsApp</a>}

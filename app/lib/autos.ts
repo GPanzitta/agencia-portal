@@ -6,6 +6,23 @@ import type { Publicacion } from './publicacion';
 import { cabecerasDeAgencia } from './agencia-servidor';
 
 const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3200/api';
+const API_ORIGIN = API.replace(/\/api\/?$/, '');
+
+export function urlFoto(u: string | null | undefined): string | null {
+  if (!u) return null;
+  return u.startsWith('http') ? u : `${API_ORIGIN}${u.startsWith('/') ? '' : '/'}${u}`;
+}
+
+function normalizarFotosAuto(a: Auto): Auto {
+  return {
+    ...a,
+    portada: urlFoto(a.portada),
+    fotos: (a.fotos ?? []).map((f) => ({
+      url: urlFoto(f.url) ?? f.url,
+      url_miniatura: urlFoto(f.url_miniatura) ?? f.url_miniatura,
+    })),
+  };
+}
 
 /** Cómo está un papel del auto, para quien lo mira en el sitio. */
 export interface PapelPublico {
@@ -97,7 +114,7 @@ export async function catalogo(f: Filtros = {}): Promise<Catalogo> {
     const res = await fetch(`${API}/catalogo/unidades${qs ? `?${qs}` : ''}`, { cache: 'no-store', signal: AbortSignal.timeout(6000), headers: await cabecerasDeAgencia() });
     if (!res.ok) return { unidades: [], marcas: [], caido: true };
     const datos = (await res.json()) as { unidades: Auto[]; marcas: string[] };
-    return { unidades: datos.unidades ?? [], marcas: datos.marcas ?? [], caido: false };
+    return { unidades: (datos.unidades ?? []).map(normalizarFotosAuto), marcas: datos.marcas ?? [], caido: false };
   } catch {
     return { unidades: [], marcas: [], caido: true };
   }
@@ -111,7 +128,7 @@ export async function auto(id: string): Promise<Auto | null> {
   const res = await fetch(`${API}/catalogo/unidades/${id}`, { cache: 'no-store', signal: AbortSignal.timeout(6000), headers: await cabecerasDeAgencia() });
   if (res.status === 404) return null;
   if (!res.ok) throw new Error(`El catálogo contestó ${res.status}`);
-  return (await res.json()) as Auto;
+  return normalizarFotosAuto((await res.json()) as Auto);
 }
 
 /** «US$ 18.500» o «$ 13.900.000». */

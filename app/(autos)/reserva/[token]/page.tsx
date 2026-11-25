@@ -49,6 +49,48 @@ export default async function TuReserva({ params }: Props) {
         <>
           <p>{r.nombre}, recibimos tu seña de {sena}. El auto queda a tu nombre{r.guardado_hasta ? <> hasta el <b>{diaLegible(r.guardado_hasta)}</b></> : null}.</p>
           <p>Te escribimos para coordinar la visita, los papeles y el pago del resto.</p>
+
+          {r.transferencia && (
+            <section className="au-bloque" style={{ marginTop: '12px' }}>
+              <h2>Estado de transferencia y gestoría</h2>
+              <dl className="au-reserva-datos">
+                <div>
+                  <dt>Etapa de la operación</dt>
+                  <dd>{r.transferencia.vendida ? 'Venta cerrada · En postventa' : 'Unidad reservada'}</dd>
+                </div>
+                <div>
+                  <dt>Trámite en Registro Automotor</dt>
+                  <dd>
+                    {r.transferencia.estado === 'ok'
+                      ? '✓ Transferencia inscripta · Cédula y título listos para retirar'
+                      : r.transferencia.estado === 'en_tramite'
+                        ? 'En trámite en el Registro Automotor'
+                        : 'Carpeta en preparación'}
+                  </dd>
+                </div>
+                {r.transferencia.nota && (
+                  <div>
+                    <dt>Observaciones de gestoría</dt>
+                    <dd>{r.transferencia.nota}</dd>
+                  </div>
+                )}
+              </dl>
+            </section>
+          )}
+
+          {r.papeles && (
+            <section className="au-bloque au-papeles" style={{ marginTop: '8px' }}>
+              <h2>Documentación del vehículo</h2>
+              <ul>
+                {r.papeles.items.map((i) => (
+                  <li key={i.tipo} data-estado={i.estado}>
+                    <span>{i.nombre}</span>
+                    <b>{i.estado === 'al_dia' ? 'Al día' : i.estado === 'en_tramite' ? 'En trámite' : 'En preparación'}</b>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
         </>
       )}
 

@@ -13,6 +13,15 @@ export interface ReservaPublica {
   titular: string | null;
   vence_at: string;
   guardado_hasta: string | null;
+  papeles?: {
+    al_dia: boolean;
+    items: { tipo: string; nombre: string; estado: 'al_dia' | 'en_tramite' | 'pendiente' }[];
+  } | null;
+  transferencia?: {
+    estado: 'falta' | 'en_tramite' | 'ok';
+    nota: string | null;
+    vendida: boolean;
+  } | null;
 }
 
 export async function reservaPublica(token: string): Promise<ReservaPublica | null> {

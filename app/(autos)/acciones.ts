@@ -26,7 +26,7 @@ export async function enviarConsulta(_previo: EstadoConsulta, datos: FormData): 
   const telefono = texto('telefono');
   const partes = texto('dia_preferido').split('-');
   const dia = partes.length === 3 && partes.every((p) => p !== '' && !Number.isNaN(Number(p))) && partes[0].length === 4 ? texto('dia_preferido') : undefined;
-  let asunto = ['consulta', 'vender', 'contacto', 'aviso'].includes(texto('asunto')) ? texto('asunto') : 'consulta';
+  let asunto = ['consulta', 'vender', 'contacto', 'aviso', 'visita'].includes(texto('asunto')) ? texto('asunto') : 'consulta';
   // Quien consulta por un auto y elige un día, está pidiendo una visita.
   if (asunto === 'consulta' && dia && texto('unidad_id')) asunto = 'visita';
   const tope = texto('precio_max').split('').filter((c) => c >= '0' && c <= '9').join('');
@@ -36,7 +36,10 @@ export async function enviarConsulta(_previo: EstadoConsulta, datos: FormData): 
   // «Vendé tu auto»: los datos del auto van juntos en una línea, como los leería el vendedor.
   let usado: string | undefined;
   let usadoDatos: string | undefined;
+  let mensajeArmado = texto('mensaje');
   if (asunto === 'vender') {
+    const tipoVehiculo = texto('usado_tipo') || 'Auto';
+    const patente = texto('usado_patente').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 12);
     const marca = texto('usado_marca');
     const modelo = texto('usado_modelo');
     const anio = texto('usado_anio');
@@ -46,19 +49,104 @@ export async function enviarConsulta(_previo: EstadoConsulta, datos: FormData): 
     const combustible = elegido('usado_combustible', ['nafta', 'diesel', 'gnc', 'hibrido', 'electrico']);
     const caja = elegido('usado_caja', ['manual', 'automatica']);
     const estado = elegido('usado_estado', ['excelente', 'bueno', 'regular', 'a reparar']);
+
+    const seguroCuotaRaw = texto('usado_seguro_cuota').replace(/\D/g, '');
+    const seguroCuota = seguroCuotaRaw ? Number(seguroCuotaRaw) : null;
+    const seguroCobertura = texto('usado_seguro_cobertura').slice(0, 60) || null;
+    const seguroCompania = texto('usado_seguro_compania').slice(0, 60) || null;
+    const costoPatenteRaw = texto('usado_costo_patente').replace(/\D/g, '');
+    const costoPatente = costoPatenteRaw ? Number(costoPatenteRaw) : null;
+    const radicacion = texto('usado_radicacion').slice(0, 80) || null;
+
     const ROTULOS: Record<string, string> = { diesel: 'diésel', gnc: 'nafta y GNC', hibrido: 'híbrido', electrico: 'eléctrico', automatica: 'automática' };
     if (marca.length < 2 || !modelo || !/^(19|20)\d{2}$/.test(anio)) {
       return { enviada: false, error: 'Contanos la marca, el modelo y el año de tu auto.' };
     }
     usado = [
       [marca, modelo, version, anio].filter(Boolean).join(' '),
+      patente ? `patente ${patente}` : null,
       km ? `${Number(km).toLocaleString('es-AR')} km` : null,
       caja ? `caja ${ROTULOS[caja] ?? caja}` : null,
       combustible ? ROTULOS[combustible] ?? combustible : null,
+      radicacion ? `radicado en ${radicacion}` : null,
       estado ? `estado ${estado}` : null,
     ].filter(Boolean).join(', ').slice(0, 200);
-    // Los mismos datos, sueltos: el ERP los usa para pasar el auto al stock sin tipearlo de nuevo.
-    usadoDatos = JSON.stringify({ marca, modelo, version: version || null, anio: Number(anio), km: km ? Number(km) : null, combustible, transmision: caja });
+
+    const guia = {
+      uso: texto('guia_uso').slice(0, 500) || null,
+      guardado: texto('guia_guardado').slice(0, 500) || null,
+      motivo_venta: texto('guia_motivo_venta').slice(0, 500) || null,
+      ultimo_service: texto('guia_ultimo_service').slice(0, 20) || null,
+      ultima_vtv: texto('guia_ultima_vtv').slice(0, 20) || null,
+      mantenimiento: texto('guia_mantenimiento').slice(0, 500) || null,
+      neumaticos: texto('guia_neumaticos').slice(0, 500) || null,
+      transferencia: texto('guia_transferencia').slice(0, 500) || null,
+      agregados: texto('guia_agregados').slice(0, 500) || null,
+      paneles_choques: texto('guia_paneles_choques').slice(0, 500) || null,
+      reparaciones: texto('guia_reparaciones').slice(0, 500) || null,
+    };
+
+    const tieneGuia = Object.values(guia).some(Boolean);
+    const fechaLegible = (iso: string | null) => (iso && /^\d{4}-\d{2}-\d{2}$/.test(iso) ? iso.split('-').reverse().join('/') : iso);
+
+    const lineasGuia = [
+      guia.uso ? `Uso: ${guia.uso}` : null,
+      guia.guardado ? `Guardado: ${guia.guardado}` : null,
+      guia.motivo_venta ? `Motivo de venta: ${guia.motivo_venta}` : null,
+      guia.ultimo_service ? `Último service: ${fechaLegible(guia.ultimo_service)}` : null,
+      guia.ultima_vtv ? `Última VTV: ${fechaLegible(guia.ultima_vtv)}` : null,
+      guia.mantenimiento ? `Mantenimiento: ${guia.mantenimiento}` : null,
+      guia.neumaticos ? `Neumáticos: ${guia.neumaticos}` : null,
+      guia.transferencia ? `Listo para transferir: ${guia.transferencia}` : null,
+      guia.agregados ? `Agregados: ${guia.agregados}` : null,
+      guia.paneles_choques ? `Paneles / choques: ${guia.paneles_choques}` : null,
+      guia.reparaciones ? `Reparaciones importantes: ${guia.reparaciones}` : null,
+    ].filter(Boolean);
+
+    const lineasGastos = [
+      seguroCompania || seguroCobertura || seguroCuota
+        ? `Seguro: ${[seguroCompania, seguroCobertura ? `cobertura ${seguroCobertura}` : null, seguroCuota ? `$ ${seguroCuota.toLocaleString('es-AR')}/mes` : null].filter(Boolean).join(' · ')}`
+        : null,
+      costoPatente ? `Patente: $ ${costoPatente.toLocaleString('es-AR')}` : null,
+      radicacion ? `Radicación: ${radicacion}` : null,
+    ].filter(Boolean);
+
+    const modoDesc = texto('modo_descripcion');
+    const cuerpoDescripcion = modoDesc === 'guiada' && lineasGuia.length
+      ? lineasGuia.join(' | ')
+      : [mensajeArmado, ...lineasGuia].filter(Boolean).join(' | ');
+
+    mensajeArmado = [...lineasGastos, cuerpoDescripcion].filter(Boolean).join(' · ');
+
+    const MAPA_CARROCERIA: Record<string, string> = {
+      'Auto': 'sedan',
+      'SUV / Camioneta': 'suv',
+      'Pickup': 'pickup',
+      'Utilitario': 'utilitario',
+      'Moto': 'moto',
+      'Otro': 'otro',
+    };
+
+    // Los mismos datos, sueltos: el ERP los usa para mostrar la ficha completa y pasar el auto al stock sin tipearlo de nuevo.
+    usadoDatos = JSON.stringify({
+      tipo_vehiculo: tipoVehiculo,
+      carroceria: MAPA_CARROCERIA[tipoVehiculo] ?? null,
+      dominio: patente || null,
+      marca,
+      modelo,
+      version: version || null,
+      anio: Number(anio),
+      km: km ? Number(km) : null,
+      combustible,
+      transmision: caja,
+      seguro_cuota: seguroCuota,
+      seguro_cobertura: seguroCobertura,
+      seguro_compania: seguroCompania,
+      costo_patente: costoPatente,
+      radicacion,
+      descripcion: cuerpoDescripcion || null,
+      guia: tieneGuia ? guia : null,
+    });
   }
 
   // Las fotos del auto que ofrece. El formulario ya las achicó; acá sólo se cuida el tope.
@@ -74,7 +162,7 @@ export async function enviarConsulta(_previo: EstadoConsulta, datos: FormData): 
     nombre: nombre.slice(0, 120),
     telefono: telefono.slice(0, 40),
     asunto,
-    mensaje: texto('mensaje').slice(0, 1000) || undefined,
+    mensaje: mensajeArmado.slice(0, 4000) || undefined,
     unidad_id: texto('unidad_id') || undefined,
     tiene_usado: usado,
     usado_datos: usadoDatos,
