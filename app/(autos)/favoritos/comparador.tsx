@@ -2,9 +2,36 @@
 
 import Link from 'next/link';
 
-import { kilometros, linkWhatsapp, precio, rotulo, type Auto } from '../../lib/autos';
+import type { Auto } from '../../lib/autos';
 import { SITIO } from '../../lib/sitio';
 import { useFavoritos } from '../favorito-boton';
+
+const ROTULOS_COMP: Record<string, Record<string, string>> = {
+  carroceria: {
+    sedan: 'Sedán', hatchback: 'Hatchback', suv: 'SUV', pickup: 'Pickup', coupe: 'Coupé', rural: 'Rural',
+    monovolumen: 'Monovolumen', utilitario: 'Utilitario', moto: 'Moto', otro: 'Otro',
+  },
+  combustible: { nafta: 'Nafta', diesel: 'Diésel', gnc: 'GNC', hibrido: 'Híbrido', electrico: 'Eléctrico' },
+  transmision: { manual: 'Manual', automatica: 'Automática' },
+  condicion: { usado: 'Usado', '0km': '0 km' },
+};
+
+const rotulo = (clave: string, valor: string | null | undefined): string | null =>
+  valor ? ROTULOS_COMP[clave]?.[valor] ?? valor : null;
+
+const precio = (a: Pick<Auto, 'precio' | 'moneda'>): string =>
+  `${a.moneda === 'USD' ? 'US$' : '$'} ${Math.round(a.precio).toLocaleString('es-AR')}`;
+
+const kilometros = (a: Pick<Auto, 'km' | 'condicion'>): string =>
+  a.condicion === '0km' ? '0 km' : `${a.km.toLocaleString('es-AR')} km`;
+
+function linkWhatsapp(numero: string | null, a: Pick<Auto, 'titulo' | 'anio'> | null, origen: string): string | null {
+  if (!numero) return null;
+  const texto = a
+    ? `Hola, vi el ${a.titulo} ${a.anio} en la página y quiero consultar. ${origen}`
+    : 'Hola, estoy buscando un auto y quiero consultar.';
+  return `https://wa.me/${numero}?text=${encodeURIComponent(texto.trim())}`;
+}
 
 export default function ComparadorFavoritos({ unidades, whatsappNumero }: { unidades: Auto[]; whatsappNumero: string | null }) {
   const [ids, toggle] = useFavoritos();
